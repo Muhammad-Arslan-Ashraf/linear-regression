@@ -1,0 +1,25 @@
+cross validation
+from sklearn.model_selection import cross_val_score, KFold
+
+# Shuffled 5-Fold Cross-Validation
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# pass the full X
+
+cv_scores = cross_val_score(model, X, Y, cv=kf, scoring='r2')
+
+print('\n--- Cross Validation (5-Fold) ---')
+print('Scores per fold :', cv_scores.round(4))
+print(f'Average R² : {cv_scores.mean():.4f}')
+print(f'Std Dev : {cv_scores.std():.4f}')
+
+# Gap between Train R² and CV Average R²
+
+cv_gap = train_r2 - cv_scores.mean()
+print(f'\nTrain R² - CV Average R² = {cv_gap:.4f} ({cv_gap\*100:.2f}%)')
+
+if cv_gap < 0.10:
+print(' No overfitting, Model is good!')
+else:
+print(' Possible overfitting, Please check the model!')
